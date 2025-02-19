@@ -37,8 +37,17 @@
 
         // Find the chart container and insert the control bar above the bottom toolbar
         const chartContainer = iframe.contentDocument.querySelector('.chart-container');
-        if (chartContainer) {
-            chartContainer.appendChild(controlBar);
+        const bottomToolbar = iframe.contentDocument.querySelector('.chart-controls-bar');
+        if (chartContainer && bottomToolbar) {
+            bottomToolbar.parentNode.insertBefore(controlBar, bottomToolbar);
+            
+            // Adjust chart container height when showing/hiding control bar
+            const originalHeight = chartContainer.style.height;
+            controlBar.addEventListener('display-changed', () => {
+                const isVisible = controlBar.style.display === 'flex';
+                chartContainer.style.height = isVisible ? 
+                    `calc(${originalHeight} - 48px)` : originalHeight;
+            });
         }
 
         // Initialize replay state
@@ -75,10 +84,7 @@
     function createControlBar() {
         const bar = document.createElement('div');
         bar.style.cssText = `
-            position: absolute;
-            bottom: 88px; /* Position above both bottom toolbars (40px + 48px) */
-            left: 0;
-            right: 0;
+            width: 100%;
             height: 48px;
             background: #ffffff;
             display: none;
@@ -86,7 +92,6 @@
             justify-content: center;
             gap: 20px;
             border-top: 1px solid #e0e3eb;
-            z-index: 999;
         `;
 
         // Create a container for the replay controls
