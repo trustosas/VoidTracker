@@ -76,17 +76,17 @@
         const bar = document.createElement('div');
         bar.style.cssText = `
             position: absolute;
-            bottom: 40px; /* Position above the bottom toolbar */
+            bottom: 88px; /* Position above both bottom toolbars (40px + 48px) */
             left: 0;
             right: 0;
             height: 48px;
-            background: #1e222d;
+            background: #ffffff;
             display: none;
             align-items: center;
             justify-content: center;
             gap: 20px;
-            border-top: 1px solid #363c4e;
-            z-index: 999; /* Below the bottom toolbar's z-index */
+            border-top: 1px solid #e0e3eb;
+            z-index: 999;
         `;
 
         // Create a container for the replay controls
@@ -133,8 +133,8 @@
         style.textContent = `
             .replay-control {
                 background: none;
-                border: 1px solid #363c4e;
-                color: #b2b5be;
+                border: 1px solid #e0e3eb;
+                color: #131722;
                 padding: 5px 10px;
                 border-radius: 4px;
                 cursor: pointer;
@@ -146,7 +146,7 @@
                 justify-content: center;
             }
             .replay-control:hover {
-                background: #363c4e;
+                background: #f0f3fa;
             }
             .replay-control select {
                 background: none;
