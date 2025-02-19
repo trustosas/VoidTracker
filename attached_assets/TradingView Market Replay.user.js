@@ -41,13 +41,18 @@
         if (chartContainer && bottomToolbar) {
             bottomToolbar.parentNode.insertBefore(controlBar, bottomToolbar);
             
-            // Adjust chart container height when showing/hiding control bar
-            const originalHeight = chartContainer.style.height;
-            controlBar.addEventListener('display-changed', () => {
-                const isVisible = controlBar.style.display === 'flex';
-                chartContainer.style.height = isVisible ? 
+            // Store original height
+            const originalHeight = getComputedStyle(chartContainer).height;
+            
+            // Create a function to toggle control bar visibility
+            const toggleControlBar = (show) => {
+                controlBar.style.display = show ? 'flex' : 'none';
+                chartContainer.style.height = show ? 
                     `calc(${originalHeight} - 48px)` : originalHeight;
-            });
+            };
+            
+            // Attach to window for debugging
+            window._toggleControlBar = toggleControlBar;
         }
 
         // Initialize replay state
@@ -58,7 +63,7 @@
         // Add event listeners
         replayButton.addEventListener('click', () => {
             isReplaying = !isReplaying;
-            controlBar.style.display = isReplaying ? 'flex' : 'none';
+            toggleControlBar(isReplaying);
             replayButton.classList.toggle('active');
 
             if (isReplaying) {
@@ -66,6 +71,11 @@
             } else {
                 exitReplayMode(iframe);
             }
+            
+            // Force layout recalculation
+            chartContainer.style.display = 'none';
+            chartContainer.offsetHeight; // Force reflow
+            chartContainer.style.display = '';
         });
     }
 
